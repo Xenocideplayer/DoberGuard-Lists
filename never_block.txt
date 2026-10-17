@@ -1,0 +1,3 @@
+# Numbers the blocklist builder must never include, even if people report
+# them: pharmacies, school alert systems, appointment reminders, and so on.
+# One number per line; '#' starts a comment.

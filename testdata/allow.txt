@@ -1,0 +1,4 @@
+# Allow list for the test fixture
+google.com
+safe.example
+!netcheck.example

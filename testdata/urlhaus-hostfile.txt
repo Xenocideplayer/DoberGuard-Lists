@@ -1,0 +1,4 @@
+# URLhaus hostfile (test input)
+#
+127.0.0.1	malware-drop.example.org
+127.0.0.1	evil-phish.example

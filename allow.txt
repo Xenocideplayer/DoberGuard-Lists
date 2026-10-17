@@ -1,0 +1,108 @@
+# Domains DoberGuard must never block AS SCAMS, even if a phishing or malware
+# source lists them. This list never un-blocks ads: ad blocking (the paid
+# feature) uses its source as is, so adservice.google.com etc. stay blockable.
+#
+# Keep it short and conservative: only services a phone can't work without
+# (OS updates, push, sign-in, CDNs for system services, messaging, banks,
+# carriers, government).
+#
+# Do NOT add domains where anyone can host their own content (github.io,
+# googleusercontent.com, blogspot.com, amazonaws.com, cloudfront.net,
+# windows.net, firebaseapp.com, web.app, workers.dev, pages.dev,
+# 000webhostapp.com, weebly.com, ...): scam pages live there and must stay
+# blockable.
+#
+# One domain per line; '#' starts a comment.
+#   name    the name and all its subdomains are never blocked as scams; it
+#           ships in the bundle's `allow` section so the app applies it too.
+#   =name   only that exact host is kept out of the scam list (not shipped);
+#           its subdomains can still be blocked (e.g. storage.googleapis.com,
+#           whose subdomains are anyone's storage buckets).
+#   !name   that exact host is kept out of EVERY list, ads included. Only for
+#           hosts whose blocking breaks the phone itself; keep this tiny.
+
+# Essentials, never blocked by any list. Android's network checks (blocking
+# them makes the phone report "no internet") and Firebase push delivery.
+!connectivitycheck.gstatic.com
+!connectivitycheck.android.com
+!clients3.google.com
+!www.google.com
+!play.googleapis.com
+!mtalk.google.com               # FCM push connection
+!fcm.googleapis.com             # FCM push API
+
+# Google / Android
+google.com
+gstatic.com
+gmail.com
+android.com
+gvt1.com            # Play Store and Chrome downloads
+gvt2.com
+# googleapis.com is NOT a root entry: *.storage.googleapis.com buckets host
+# malware and phishing that the sources rightly list. Only the API hosts
+# Android itself needs are allowed.
+www.googleapis.com
+android.googleapis.com
+fcm.googleapis.com              # push notifications
+play.googleapis.com
+oauth2.googleapis.com
+firebaseinstallations.googleapis.com
+=googleapis.com
+=storage.googleapis.com         # buckets are path-based here; subdomain buckets stay blockable
+=firebasestorage.googleapis.com # path-based app storage used by many apps
+
+# Apple
+apple.com
+icloud.com
+mzstatic.com        # App Store assets
+apple-dns.net
+
+# Microsoft
+microsoft.com
+microsoftonline.com # account sign-in
+live.com
+outlook.com
+office.com
+office365.com
+
+# Samsung (One UI updates and accounts)
+samsung.com
+samsungcloud.com
+
+# Amazon (the store and account, not AWS hosting)
+amazon.com
+
+# Infrastructure and CDNs used by system services
+cloudflare.com
+cloudflare-dns.com
+akamaiedge.net
+akamaized.net
+quad9.net
+mozilla.org
+github.com
+
+# Messaging
+whatsapp.com
+whatsapp.net
+signal.org
+telegram.org
+
+# Payments and large US banks
+paypal.com
+chase.com
+bankofamerica.com
+wellsfargo.com
+citi.com
+capitalone.com
+usbank.com
+
+# US carriers
+verizon.com
+att.com
+t-mobile.com
+
+# US government
+usa.gov
+irs.gov
+ssa.gov
+ftc.gov
