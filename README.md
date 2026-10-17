@@ -8,7 +8,7 @@ Every Monday a GitHub Action downloads the sources below, merges them into one
 signed file and attaches it to the release tagged `latest`:
 
 ```
-https://github.com/Xenocideplayer/doberguard-lists/releases/download/latest/doberguard-lists.bin
+https://github.com/Xenocideplayer/DoberGuard-Lists/releases/download/latest/doberguard-lists.bin
 ```
 
 The apps check the signature with a public key built into them, so a file that
