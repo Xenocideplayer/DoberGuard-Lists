@@ -17,9 +17,9 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 300   # FTC paging is slow (rate-limited to 1,000 requests/hour)
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@v6
         with:
           python-version: "3.12"
 
@@ -34,6 +34,11 @@ jobs:
           LISTS_SIGNING_KEY: ${{ secrets.LISTS_SIGNING_KEY }}
           FTC_API_KEY: ${{ secrets.FTC_API_KEY }}   # numbers are skipped when this is empty
         run: |
+          if [ -z "$LISTS_SIGNING_KEY" ]; then
+            echo "::error::Add the LISTS_SIGNING_KEY secret (Settings > Secrets and variables > Actions) so the lists can be signed."
+            exit 1
+          fi
+          [ -z "$FTC_API_KEY" ] && echo "::warning::No FTC_API_KEY secret: this bundle has no new spam numbers."
           mkdir -p dist
           python build_lists.py --out dist/doberguard-lists.bin --summary dist/notes.md
           cat dist/notes.md >> "$GITHUB_STEP_SUMMARY"
