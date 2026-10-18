@@ -1,0 +1,5 @@
+# Test excerpt in the format of StevenBlack porn-only hosts
+0.0.0.0 adult-site.example
+0.0.0.0 www.adult-site.example
+0.0.0.0 nsfw.example.org
+0.0.0.0 netcheck.example

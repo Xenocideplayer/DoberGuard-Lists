@@ -21,6 +21,7 @@ didn't come from this pipeline is rejected.
 | `scam` | [Phishing.Database](https://github.com/Phishing-Database/Phishing.Database) `phishing-domains-ACTIVE.txt` | MIT | Phishing domains that are currently live |
 | `scam` | [URLhaus](https://urlhaus.abuse.ch/) hostfile, by abuse.ch | CC0 | Hosts serving malware |
 | `ads` | [StevenBlack/hosts](https://github.com/StevenBlack/hosts) base `hosts` (adware + malware) | MIT; the lists it merges are credited in its README | Ad, tracking and malware hosts |
+| `adult` | [StevenBlack/hosts porn-only](https://github.com/StevenBlack/hosts/tree/master/alternates/porn-only): [Sinfonietta](https://github.com/Sinfonietta/hostfiles) and [Clefspeare13 pornhosts](https://github.com/Clefspeare13/pornhosts) (MIT), [Tiuxo](https://github.com/tiuxo/hosts) and [brijrajparmar27](https://github.com/brijrajparmar27/host-sources) (CC BY 4.0) | MIT / CC BY 4.0 (attribution above) | Adult sites, for Shield's optional adult-site blocker |
 | `numbers` | [FTC Do Not Call complaints API](https://www.ftc.gov/developer/api/v0/endpoints/do-not-call-dnc-reported-calls-data-api) | US government work, public domain | Phone numbers reported at least twice in the last 7 days |
 | `allow` | [`allow.txt`](allow.txt) in this repo | ours | Domains that must never be blocked as scams |
 
@@ -77,7 +78,7 @@ python3 -m unittest test_build_lists
 
 Useful flags: `--sources-dir DIR` reads pre-downloaded sources
 (`phishing-domains-ACTIVE.txt`, `urlhaus-hostfile.txt`,
-`stevenblack-hosts.txt`) instead of downloading them; `--skip-numbers`;
+`stevenblack-hosts.txt`, `stevenblack-porn-only.txt`) instead of downloading them; `--skip-numbers`;
 `--days N` and `--min-reports N` for the FTC data (defaults 7 and 2);
 `--summary FILE` writes release notes. Fetching a week of FTC complaints takes
 a few thousand API requests, which at the free key's 1,000 requests per hour

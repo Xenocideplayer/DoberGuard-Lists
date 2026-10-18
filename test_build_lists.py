@@ -195,6 +195,10 @@ class EndToEndTest(unittest.TestCase):
         self.assertEqual(sections["numbers"], (2, b"2025550111\n3105550142"))
         self.assertIn("scam: 3", result.stdout)
         self.assertIn("ads: 4", result.stdout)
+        # Adult sites: their own section; "!" essentials stay out of it too.
+        adult = set(hashes_of(sections["adult"][1]))
+        self.assertEqual(adult, {b.domain_hash(d) for d in ["adult-site.example", "www.adult-site.example", "nsfw.example.org"]})
+        self.assertIn("adult: 3", result.stdout)
         self.assertIn("| numbers | 2 |", notes)
 
     def test_numbers_skipped_without_api_key(self):
@@ -206,7 +210,7 @@ class EndToEndTest(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             # Only one source present; the others would be downloaded from an unreachable host.
             (Path(tmp) / "urlhaus-hostfile.txt").write_text("")
-            for name in ["phishing-domains-ACTIVE.txt", "stevenblack-hosts.txt"]:
+            for name in ["phishing-domains-ACTIVE.txt", "stevenblack-hosts.txt", "stevenblack-porn-only.txt"]:
                 (Path(tmp) / name).write_text((TESTDATA / name).read_text())
             result, bundle, _ = self.run_builder("--skip-numbers", sources=Path(tmp))
             self.assertNotEqual(result.returncode, 0)

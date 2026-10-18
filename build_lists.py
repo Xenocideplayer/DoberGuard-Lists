@@ -5,6 +5,7 @@ Build the signed DoberGuard list bundle (doberguard-lists.bin).
 Sections (bundle format v1, see README.md):
   scam     Phishing.Database ACTIVE domains + URLhaus hostfile   (domain hashes)
   ads      StevenBlack/hosts base hosts file                     (domain hashes)
+  adult    StevenBlack/hosts porn-only (porn extension)           (domain hashes)
   allow    allow.txt: domains that must never be blocked as scams (domain hashes)
   numbers  FTC Do Not Call complaints, optional                  (text, one number per line)
 
@@ -64,6 +65,10 @@ SOURCES = [
     Source("URLhaus", "scam", "https://urlhaus.abuse.ch/downloads/hostfile/", "urlhaus-hostfile.txt"),
     Source("StevenBlack/hosts", "ads", "https://raw.githubusercontent.com/StevenBlack/hosts/master/hosts",
            "stevenblack-hosts.txt"),
+    # Sinfonietta and Clefspeare13 pornhosts (MIT), Tiuxo and brijrajparmar27 (CC BY 4.0), via StevenBlack.
+    Source("StevenBlack/hosts porn extension", "adult",
+           "https://raw.githubusercontent.com/StevenBlack/hosts/master/alternates/porn-only/hosts",
+           "stevenblack-porn-only.txt"),
 ]
 
 # ---------------------------------------------------------------- domains
@@ -328,7 +333,7 @@ def build(args) -> int:
     print(f"Signing with public key {public_key_b64(key)}", file=sys.stderr)
 
     allow, exact, essential = load_allow(args.allow)
-    domains: dict[str, set[str]] = {"scam": set(), "ads": set()}
+    domains: dict[str, set[str]] = {"scam": set(), "ads": set(), "adult": set()}
     per_source: list[tuple[str, int]] = []
     print("Domain sources:", file=sys.stderr)
     for source in SOURCES:
@@ -345,12 +350,15 @@ def build(args) -> int:
 
     scam = remove_allowed(domains["scam"], allow, exact | essential)
     ads = domains["ads"] - essential  # allow.txt roots never un-block ads
+    adult = domains["adult"] - essential  # nor adult sites
     sections = [
         ("scam", TYPE_DOMAINS, hash_section(scam)),
         ("ads", TYPE_DOMAINS, hash_section(ads)),
         ("allow", TYPE_DOMAINS, hash_section(allow)),
+        ("adult", TYPE_DOMAINS, hash_section(adult)),
     ]
-    counts = {"scam": len(sections[0][2]) // 8, "ads": len(sections[1][2]) // 8, "allow": len(allow)}
+    counts = {"scam": len(sections[0][2]) // 8, "ads": len(sections[1][2]) // 8, "allow": len(allow),
+              "adult": len(sections[3][2]) // 8}
     removed = len(domains["scam"]) - len(scam) + len(domains["ads"]) - len(ads)
 
     api_key = os.environ.get("FTC_API_KEY", "").strip()
